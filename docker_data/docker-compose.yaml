@@ -1,0 +1,140 @@
+version: '3.8'
+
+
+networks:
+  fl-net:
+    driver: bridge
+
+services:
+  server:
+    build: 
+      context: ./server
+    container_name: fl-server
+    command: ./entrypoint.sh
+    environment:
+      - TOTAL_ROUNDS=9999999
+      - FL_SERVER_TIMEOUT=900
+    ports:
+      - "8080:8080"
+    networks:
+      - fl-net
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+
+  
+
+  client-0:
+    build: 
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - fl-net
+    command: python3 client.py
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+    environment:
+      - FL_SERVER=server:8080
+      - TOTAL_CLIENTS=100
+      - CLIENT_ID=-1
+      - NUM_SAMPLES=512
+      - LAYER_SIZE=2048
+      - REAL_CLIENT_ID=0
+      - IGNORE_WARMUP=True
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: on-faiulre
+        condition: "no"
+  client-1:
+    build: 
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - fl-net
+    command: python3 client.py
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+    environment:
+      - FL_SERVER=server:8080
+      - TOTAL_CLIENTS=100
+      - CLIENT_ID=-1
+      - NUM_SAMPLES=512
+      - LAYER_SIZE=2048
+      - REAL_CLIENT_ID=1
+      - IGNORE_WARMUP=True
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: on-faiulre
+        condition: "no"
+  client-2:
+    build: 
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - fl-net
+    command: python3 client.py
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+    environment:
+      - FL_SERVER=server:8080
+      - TOTAL_CLIENTS=100
+      - CLIENT_ID=-1
+      - NUM_SAMPLES=512
+      - LAYER_SIZE=2048
+      - REAL_CLIENT_ID=2
+      - IGNORE_WARMUP=True
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: on-faiulre
+        condition: "no"
+  client-3:
+    build: 
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - fl-net
+    command: python3 client.py
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+    environment:
+      - FL_SERVER=server:8080
+      - TOTAL_CLIENTS=100
+      - CLIENT_ID=-1
+      - NUM_SAMPLES=512
+      - LAYER_SIZE=2048
+      - REAL_CLIENT_ID=3
+      - IGNORE_WARMUP=True
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: on-faiulre
+        condition: "no"
+  client-4:
+    build: 
+      context: ./client
+    depends_on:
+      - server
+    networks:
+      - fl-net
+    command: python3 client.py
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+    environment:
+      - FL_SERVER=server:8080
+      - TOTAL_CLIENTS=100
+      - CLIENT_ID=-1
+      - NUM_SAMPLES=512
+      - LAYER_SIZE=2048
+      - REAL_CLIENT_ID=4
+      - IGNORE_WARMUP=True
+    deploy:
+      replicas: 1
+      restart_policy:
+        # condition: on-faiulre
+        condition: "no"

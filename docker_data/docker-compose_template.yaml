@@ -1,0 +1,25 @@
+version: '3.8'
+
+
+networks:
+  fl-net:
+    driver: bridge
+
+services:
+  server:
+    build: 
+      context: ./server
+    container_name: fl-server
+    command: ./entrypoint.sh
+    environment:
+      - TOTAL_ROUNDS=9999999
+      - FL_SERVER_TIMEOUT=900
+    ports:
+      - "8080:8080"
+    networks:
+      - fl-net
+    volumes:
+      - ./logs:/app/logs  # Persist logs
+
+  
+
